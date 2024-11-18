@@ -1,8 +1,8 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 
 import RichTextEditor from "./components/RichTextEditor/RichTextEditor";
 
-import "./style/QuestionEditor.scss"
+import "./style/QuestionEditor.scss";
 
 export enum QuestionItemEditorType {
   SIMPLE_TEXT_EDITOR = "simple-text-editor",
@@ -26,67 +26,70 @@ interface QuestionEditorProps {
 const QuestionEditor: React.FC<QuestionEditorProps> = (props) => {
   const { question, onChange } = props;
 
-  const toolbarWrapperDOMRef = useRef<HTMLDivElement>(null);
+  const [toolbarWrapperDOM, setToolbarWrapperDOM] =
+    useState<HTMLDivElement | null>();
 
   return (
     <div className="questioneditor">
-      <div className="toolbar-wrapper" ref={toolbarWrapperDOMRef}></div>
+      <div className="toolbar-wrapper" ref={setToolbarWrapperDOM}></div>
       <div className="content-wrapper">
-        {question.map((q) => {
-          if (q.editor === QuestionItemEditorType.SIMPLE_TEXT_EDITOR) {
-            return (
-              <div className="questionitem" key={q.id}>
-                <div className="questionitem__label">{q.label}</div>
-                <div className="questionitem__value">
-                  <input
-                    value={q.value}
-                    onChange={(e) => {
-                      onChange(q, e.target.value);
-                    }}
-                  ></input>
+        {toolbarWrapperDOM &&
+          question.map((q) => {
+            if (q.editor === QuestionItemEditorType.SIMPLE_TEXT_EDITOR) {
+              return (
+                <div className="questionitem" key={q.id}>
+                  <div className="questionitem__label">{q.label}</div>
+                  <div className="questionitem__value">
+                    <input
+                      value={q.value}
+                      onChange={(e) => {
+                        onChange(q, e.target.value);
+                      }}
+                    ></input>
+                  </div>
                 </div>
-              </div>
-            );
-          } else if (
-            q.editor === QuestionItemEditorType.SIMPLE_DROPDOWN_EDITOR
-          ) {
-            return (
-              <div className="questionitem" key={q.id}>
-                <div className="questionitem__label">{q.label}</div>
-                <div className="questionitem__value">
-                  <select
-                    value={q.value}
-                    onChange={(e) => {
-                      onChange(q, e.target.value);
-                    }}
-                  >
-                    {q.dropdownCode?.map(({ value, content }) => (
-                      <option key={value} value={value}>
-                        {content}
-                      </option>
-                    ))}
-                  </select>
+              );
+            } else if (
+              q.editor === QuestionItemEditorType.SIMPLE_DROPDOWN_EDITOR
+            ) {
+              return (
+                <div className="questionitem" key={q.id}>
+                  <div className="questionitem__label">{q.label}</div>
+                  <div className="questionitem__value">
+                    <select
+                      value={q.value}
+                      onChange={(e) => {
+                        onChange(q, e.target.value);
+                      }}
+                    >
+                      {q.dropdownCode?.map(({ value, content }) => (
+                        <option key={value} value={value}>
+                          {content}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
-            );
-          } else if (q.editor === QuestionItemEditorType.RICH_TEXT_EDITOR) {
-            return (
-              <div className="questionitem" key={q.id}>
-                <div className="questionitem__label">{q.label}</div>
-                <div className="questionitem__value">
-                  <RichTextEditor
-                    html={q.value}
-                    onChange={(html) => {
-                      onChange(q, html);
-                    }}
-                  ></RichTextEditor>
+              );
+            } else if (q.editor === QuestionItemEditorType.RICH_TEXT_EDITOR) {
+              return (
+                <div className="questionitem" key={q.id}>
+                  <div className="questionitem__label">{q.label}</div>
+                  <div className="questionitem__value">
+                    <RichTextEditor
+                      html={q.value}
+                      onChange={(html) => {
+                        onChange(q, html);
+                      }}
+                      toolbarContainer={() => toolbarWrapperDOM!}
+                    ></RichTextEditor>
+                  </div>
                 </div>
-              </div>
-            );
-          } else {
-            return <div key={q.id}>还没处理好...{q.editor}</div>;
-          }
-        })}
+              );
+            } else {
+              return <div key={q.id}>还没处理好...{q.editor}</div>;
+            }
+          })}
       </div>
     </div>
   );

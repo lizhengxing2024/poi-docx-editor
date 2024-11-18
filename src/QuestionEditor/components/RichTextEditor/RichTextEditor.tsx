@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
 import "@wangeditor/editor/dist/css/style.css";
 import { createEditor, createToolbar } from "@wangeditor/editor";
@@ -9,10 +10,11 @@ import "./style/RichTextEditor.scss";
 export interface RichTextEditorProps {
   html: string;
   onChange: (html: string) => void;
+  toolbarContainer: () => HTMLDivElement;
 }
 
 const RichTextEditor: React.FC<RichTextEditorProps> = (props) => {
-  const { html, onChange } = props;
+  const { html, onChange, toolbarContainer } = props;
 
   const editorDefaultConfig = {};
   const editorDOMRef = useRef<HTMLDivElement>(null);
@@ -84,7 +86,10 @@ const RichTextEditor: React.FC<RichTextEditorProps> = (props) => {
 
   return (
     <div className="questioneditor—wrapper">
-      <div className="toolbar-container" ref={toolbarDOMRef}></div>
+      {createPortal(
+        <div className="toolbar-container" ref={toolbarDOMRef}></div>,
+        toolbarContainer()
+      )}
       <div className="editor-container" ref={editorDOMRef}></div>
     </div>
   );
