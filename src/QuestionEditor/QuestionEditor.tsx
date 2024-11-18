@@ -12,7 +12,8 @@ export enum QuestionItemEditorType {
   RICH_TEXT_EDITOR = "rich-text-editor",
 }
 
-interface Question {
+export interface QuestionI {
+  id: string;
   label: string;
   value: string;
   editor: QuestionItemEditorType;
@@ -20,11 +21,12 @@ interface Question {
 }
 
 interface QuestionEditorProps {
-  question: Array<Question>;
+  question: Array<QuestionI>;
+  onChange: (questionItem: QuestionI, value: string) => void;
 }
 
 const QuestionEditor: React.FC<QuestionEditorProps> = (props) => {
-  const { question } = props;
+  const { question, onChange } = props;
 
   const editorDefaultConfig = {};
   const editorDOMRef = useRef<HTMLDivElement>(null);
@@ -110,28 +112,40 @@ const QuestionEditor: React.FC<QuestionEditorProps> = (props) => {
       {question.map((q) => {
         if (q.editor === QuestionItemEditorType.SIMPLE_TEXT_EDITOR) {
           return (
-            <div className="questionitem">
+            <div className="questionitem" key={q.id}>
               <div className="questionitem__label">{q.label}</div>
               <div className="questionitem__value">
-                <input value={q.value}></input>
+                <input
+                  value={q.value}
+                  onChange={(e) => {
+                    onChange(q, e.target.value);
+                  }}
+                ></input>
               </div>
             </div>
           );
         } else if (q.editor === QuestionItemEditorType.SIMPLE_DROPDOWN_EDITOR) {
           return (
-            <div className="questionitem">
+            <div className="questionitem" key={q.id}>
               <div className="questionitem__label">{q.label}</div>
               <div className="questionitem__value">
-                <select value={q.value}>
+                <select
+                  value={q.value}
+                  onChange={(e) => {
+                    onChange(q, e.target.value);
+                  }}
+                >
                   {q.dropdownCode?.map(({ value, content }) => (
-                    <option value={value}>{content}</option>
+                    <option key={value} value={value}>
+                      {content}
+                    </option>
                   ))}
                 </select>
               </div>
             </div>
           );
         } else {
-          return <div>还没处理好...{q.editor}</div>;
+          return <div key={q.id}>还没处理好...{q.editor}</div>;
         }
       })}
 
