@@ -49,6 +49,12 @@ function App() {
       value: "",
       editor: QuestionItemEditorType.RICH_TEXT_EDITOR,
     },
+    {
+      id: "004",
+      label: "试题描述",
+      value: "",
+      editor: QuestionItemEditorType.RICH_TEXT_EDITOR,
+    },
   ]);
 
   const handleChange = (questionItem: QuestionI, value: string) => {

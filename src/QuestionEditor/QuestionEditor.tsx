@@ -2,6 +2,8 @@ import React, { useRef } from "react";
 
 import RichTextEditor from "./components/RichTextEditor/RichTextEditor";
 
+import "./style/QuestionEditor.scss"
+
 export enum QuestionItemEditorType {
   SIMPLE_TEXT_EDITOR = "simple-text-editor",
   SIMPLE_DROPDOWN_EDITOR = "simple-dropdown-editor",
