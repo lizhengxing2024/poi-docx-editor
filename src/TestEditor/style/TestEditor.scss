@@ -1,0 +1,11 @@
+.testeditor—wrapper {
+    border: 1px solid #ccc;
+  
+    > .toolbar-container {
+      border-bottom: 1px solid #ccc;
+    }
+    > .editor-container {
+      height: 500px;
+    }
+  }
+  
