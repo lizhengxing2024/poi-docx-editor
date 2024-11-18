@@ -20,7 +20,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = (props) => {
   const editorDOMRef = useRef<HTMLDivElement>(null);
   const editorInstRef = useRef<IDomEditor | null>(null);
   const editorHtmlRef = useRef<string>();
-
+  const [editorFocused, setEditorFocused] = useState(false);
   const [editorInstReady, setEditorInstReady] = useState(false);
 
   const toolbarDefaultConfig = {};
@@ -35,6 +35,14 @@ const RichTextEditor: React.FC<RichTextEditorProps> = (props) => {
 
   const handleChanged = (editor: IDomEditor) => {
     onChange(editor.getHtml());
+  };
+
+  const handleFocus = () => {
+    setEditorFocused(true);
+  };
+
+  const handleBlur = () => {
+    setEditorFocused(false);
   };
 
   useEffect(() => {
@@ -65,6 +73,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = (props) => {
         ...editorDefaultConfig,
         onCreated: handleCreated,
         onChange: handleChanged,
+        onFocus: handleFocus,
+        onBlur: handleBlur,
       },
       html: "",
       mode: "default",
@@ -87,7 +97,11 @@ const RichTextEditor: React.FC<RichTextEditorProps> = (props) => {
   return (
     <div className="questioneditor—wrapper">
       {createPortal(
-        <div className="toolbar-container" ref={toolbarDOMRef}></div>,
+        <div
+          className="toolbar-container"
+          ref={toolbarDOMRef}
+          style={!editorFocused ? { display: "none" } : {}}
+        ></div>,
         toolbarContainer()
       )}
       <div className="editor-container" ref={editorDOMRef}></div>

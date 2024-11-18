@@ -27,7 +27,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = (props) => {
   const { question, onChange } = props;
 
   const [toolbarWrapperDOM, setToolbarWrapperDOM] =
-    useState<HTMLDivElement | null>(); // 子元素（富文本编辑器）需要等父元素挂载好才能渲染
+    useState<HTMLDivElement | null>(); // 子元素（富文本编辑器）需要等父元素挂载好才能渲染（因为toolbar需要挂载上来）
 
   return (
     <div className="questioneditor">
