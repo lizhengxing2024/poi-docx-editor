@@ -1,9 +1,9 @@
-import TestEditor from "./TestEditor/TestEditor";
+import QuestionEditor from "./QuestionEditor/QuestionEditor";
 
 import "./app.scss";
 
 function App() {
-  return <TestEditor></TestEditor>;
+  return <QuestionEditor></QuestionEditor>;
 }
 
 export default App;

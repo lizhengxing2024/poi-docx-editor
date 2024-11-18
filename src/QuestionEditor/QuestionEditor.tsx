@@ -4,9 +4,9 @@ import "@wangeditor/editor/dist/css/style.css";
 import { createEditor, createToolbar } from "@wangeditor/editor";
 import { IDomEditor, IEditorConfig, IToolbarConfig } from "@wangeditor/editor";
 
-import "./style/TestEditor.scss";
+import "./style/QuestionEditor.scss";
 
-const TestEditor: React.FC = () => {
+const QuestionEditor: React.FC = () => {
   const editorDefaultConfig = {};
   const editorDOMRef = useRef<HTMLDivElement>(null);
   const editorInstRef = useRef<IDomEditor | null>(null);
@@ -87,11 +87,11 @@ const TestEditor: React.FC = () => {
   //   }, [value]);
 
   return (
-    <div className="testeditor—wrapper">
+    <div className="questioneditor—wrapper">
       <div className="toolbar-container" ref={toolbarDOMRef}></div>
       <div className="editor-container" ref={editorDOMRef}></div>
     </div>
   );
 };
 
-export default TestEditor;
+export default QuestionEditor;
