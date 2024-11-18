@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import "@wangeditor/editor/dist/css/style.scss";
-import "./app.css";
+import "@wangeditor/editor/dist/css/style.css";
+import "./app.scss";
 
 import { createEditor, createToolbar } from "@wangeditor/editor";
 import { IDomEditor, IEditorConfig, IToolbarConfig } from "@wangeditor/editor";
