@@ -62,7 +62,6 @@ function App() {
           : q
       )
     );
-    console.log(value);
   };
 
   return (

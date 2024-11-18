@@ -1,23 +1,17 @@
 .questioneditor {
-  > .questionitem {
-    display: flex;
-    gap: 8px;
-
-    > .questionitem__label {
-    }
-
-    > .questionitem__value {
-    }
+  > .toolbar-wrapper {
   }
-}
 
-.questioneditor—wrapper {
-  border: 1px solid #ccc;
+  > .content-wrapper {
+    > .questionitem {
+      display: flex;
+      gap: 8px;
 
-  > .toolbar-container {
-    border-bottom: 1px solid #ccc;
-  }
-  > .editor-container {
-    height: 500px;
+      > .questionitem__label {
+      }
+
+      > .questionitem__value {
+      }
+    }
   }
 }
