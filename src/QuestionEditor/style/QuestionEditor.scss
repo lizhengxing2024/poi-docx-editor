@@ -1,3 +1,16 @@
+.questioneditor {
+  > .questionitem {
+    display: flex;
+    gap: 8px;
+
+    > .questionitem__label {
+    }
+
+    > .questionitem__value {
+    }
+  }
+}
+
 .questioneditor—wrapper {
   border: 1px solid #ccc;
 

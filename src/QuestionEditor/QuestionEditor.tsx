@@ -6,7 +6,26 @@ import { IDomEditor, IEditorConfig, IToolbarConfig } from "@wangeditor/editor";
 
 import "./style/QuestionEditor.scss";
 
-const QuestionEditor: React.FC = () => {
+export enum QuestionItemEditorType {
+  SIMPLE_TEXT_EDITOR = "simple-text-editor",
+  SIMPLE_DROPDOWN_EDITOR = "simple-dropdown-editor",
+  RICH_TEXT_EDITOR = "rich-text-editor",
+}
+
+interface Question {
+  label: string;
+  value: string;
+  editor: QuestionItemEditorType;
+  dropdownCode?: { value: string; content: string }[];
+}
+
+interface QuestionEditorProps {
+  question: Array<Question>;
+}
+
+const QuestionEditor: React.FC<QuestionEditorProps> = (props) => {
+  const { question } = props;
+
   const editorDefaultConfig = {};
   const editorDOMRef = useRef<HTMLDivElement>(null);
   const editorInstRef = useRef<IDomEditor | null>(null);
@@ -87,9 +106,39 @@ const QuestionEditor: React.FC = () => {
   //   }, [value]);
 
   return (
-    <div className="questioneditor—wrapper">
-      <div className="toolbar-container" ref={toolbarDOMRef}></div>
-      <div className="editor-container" ref={editorDOMRef}></div>
+    <div className="questioneditor">
+      {question.map((q) => {
+        if (q.editor === QuestionItemEditorType.SIMPLE_TEXT_EDITOR) {
+          return (
+            <div className="questionitem">
+              <div className="questionitem__label">{q.label}</div>
+              <div className="questionitem__value">
+                <input value={q.value}></input>
+              </div>
+            </div>
+          );
+        } else if (q.editor === QuestionItemEditorType.SIMPLE_DROPDOWN_EDITOR) {
+          return (
+            <div className="questionitem">
+              <div className="questionitem__label">{q.label}</div>
+              <div className="questionitem__value">
+                <select value={q.value}>
+                  {q.dropdownCode?.map(({ value, content }) => (
+                    <option value={value}>{content}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          );
+        } else {
+          return <div>还没处理好...{q.editor}</div>;
+        }
+      })}
+
+      <div className="questioneditor—wrapper">
+        <div className="toolbar-container" ref={toolbarDOMRef}></div>
+        <div className="editor-container" ref={editorDOMRef}></div>
+      </div>
     </div>
   );
 };
