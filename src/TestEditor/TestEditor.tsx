@@ -7,17 +7,14 @@ import { IDomEditor, IEditorConfig, IToolbarConfig } from "@wangeditor/editor";
 import "./style/TestEditor.scss";
 
 const TestEditor: React.FC = () => {
-  const editorDOMRef = useRef<HTMLDivElement>(null);
-  const toolbarDOMRef = useRef<HTMLDivElement>(null);
-
-  const [editorInstReady, setEditorInstReady] = useState(false);
-  const editorInstRef = useRef<IDomEditor | null>(null);
-
   const editorDefaultConfig = {};
-  const toolbarDefaultConfig = {};
-  const defaultHtml = "";
-
+  const editorDOMRef = useRef<HTMLDivElement>(null);
+  const editorInstRef = useRef<IDomEditor | null>(null);
+  const [editorInstReady, setEditorInstReady] = useState(false);
   const [editorValue, setEditorValue] = useState<string>("");
+
+  const toolbarDefaultConfig = {};
+  const toolbarDOMRef = useRef<HTMLDivElement>(null);
 
   //   const [curValue, setCurValue] = useState("");
 
@@ -28,6 +25,7 @@ const TestEditor: React.FC = () => {
   //   };
 
   const handleCreated = (editor: IDomEditor) => {
+    editor.setHtml(""); // 设置外部初值
     editorInstRef.current = editor;
     setEditorInstReady(true);
   };
@@ -57,7 +55,7 @@ const TestEditor: React.FC = () => {
         onCreated: handleCreated,
         onChange: handleChanged,
       },
-      html: editorValue,
+      html: "",
       mode: "default",
     });
 
