@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import RichTextEditor from "./components/RichTextEditor/RichTextEditor";
+import { createEditor, createToolbar } from "@wangeditor/editor";
 
 import "./style/QuestionEditor.scss";
 
@@ -28,6 +29,15 @@ const QuestionEditor: React.FC<QuestionEditorProps> = (props) => {
 
   const [toolbarWrapperDOM, setToolbarWrapperDOM] =
     useState<HTMLDivElement | null>(); // 子元素（富文本编辑器）需要等父元素挂载好才能渲染（因为toolbar需要挂载上来）
+
+  const [
+    currentVisibleRichTextEditorToolbar,
+    setCurrentVisibleRichTextEditorToolbar,
+  ] = useState<string>(
+    question.filter(
+      (x) => x.editor === QuestionItemEditorType.RICH_TEXT_EDITOR
+    )[0].id
+  );
 
   return (
     <div className="questioneditor">
@@ -81,6 +91,11 @@ const QuestionEditor: React.FC<QuestionEditorProps> = (props) => {
                       onChange={(html) => {
                         onChange(q, html);
                       }}
+                      onFocus={() =>
+                        setCurrentVisibleRichTextEditorToolbar(q.id)
+                      }
+                      onBlur={() => {}}
+                      showToolbar={currentVisibleRichTextEditorToolbar === q.id}
                       toolbarContainer={() => toolbarWrapperDOM!}
                     ></RichTextEditor>
                   </div>

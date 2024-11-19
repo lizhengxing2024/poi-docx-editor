@@ -10,17 +10,26 @@ import "./style/RichTextEditor.scss";
 export interface RichTextEditorProps {
   html: string;
   onChange: (html: string) => void;
+  onFocus: () => void;
+  onBlur: () => void;
+  showToolbar: boolean;
   toolbarContainer: () => HTMLDivElement;
 }
 
 const RichTextEditor: React.FC<RichTextEditorProps> = (props) => {
-  const { html, onChange, toolbarContainer } = props;
+  const {
+    html,
+    onChange,
+    onFocus,
+    onBlur,
+    showToolbar = true,
+    toolbarContainer,
+  } = props;
 
   const editorDefaultConfig = {};
   const editorDOMRef = useRef<HTMLDivElement>(null);
   const editorInstRef = useRef<IDomEditor | null>(null);
   const editorHtmlRef = useRef<string>();
-  const [editorFocused, setEditorFocused] = useState(false);
   const [editorInstReady, setEditorInstReady] = useState(false);
 
   const toolbarDefaultConfig = {};
@@ -35,14 +44,6 @@ const RichTextEditor: React.FC<RichTextEditorProps> = (props) => {
 
   const handleChanged = (editor: IDomEditor) => {
     onChange(editor.getHtml());
-  };
-
-  const handleFocus = () => {
-    setEditorFocused(true);
-  };
-
-  const handleBlur = () => {
-    setEditorFocused(false);
   };
 
   useEffect(() => {
@@ -73,8 +74,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = (props) => {
         ...editorDefaultConfig,
         onCreated: handleCreated,
         onChange: handleChanged,
-        onFocus: handleFocus,
-        onBlur: handleBlur,
+        onFocus: onFocus,
+        onBlur: onBlur,
       },
       html: "",
       mode: "default",
@@ -100,7 +101,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = (props) => {
         <div
           className="toolbar-container"
           ref={toolbarDOMRef}
-          style={!editorFocused ? { display: "none" } : {}}
+          style={!showToolbar ? { display: "none" } : {}}
         ></div>,
         toolbarContainer()
       )}
