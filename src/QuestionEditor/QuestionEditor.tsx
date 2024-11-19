@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import RichTextEditor from "./components/RichTextEditor/RichTextEditor";
-import { createEditor, createToolbar } from "@wangeditor/editor";
 
 import "./style/QuestionEditor.scss";
 
@@ -30,13 +29,13 @@ const QuestionEditor: React.FC<QuestionEditorProps> = (props) => {
   const [toolbarWrapperDOM, setToolbarWrapperDOM] =
     useState<HTMLDivElement | null>(); // 子元素（富文本编辑器）需要等父元素挂载好才能渲染（因为toolbar需要挂载上来）
 
-    /**
-     * 视觉上，多个 富文本编辑器 共用一个 toolbar
-     * 实际上，多个 富文本编辑器 的 toolbar 都渲染在同一个区域，
-     *    通过保证无论何时，只有一个 toolbar 显示实现该效果
-     *    1. 初始化时，第一个富文本编辑器的 toolbar 可见
-     *    2. 最后一次获取 focus 的富文本编辑器的 toolbar 可见
-     */
+  /**
+   * 视觉上，多个 富文本编辑器 共用一个 toolbar
+   * 实际上，多个 富文本编辑器 的 toolbar 都渲染在同一个区域，
+   *    通过保证无论何时，只有一个 toolbar 显示实现该效果
+   *    1. 初始化时，第一个富文本编辑器的 toolbar 可见
+   *    2. 最后一次获取 focus 的富文本编辑器的 toolbar 可见
+   */
   const [
     currentVisibleRichTextEditorToolbar,
     setCurrentVisibleRichTextEditorToolbar,
