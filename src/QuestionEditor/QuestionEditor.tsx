@@ -45,71 +45,73 @@ const QuestionEditor: React.FC<QuestionEditorProps> = (props) => {
     )[0].id
   );
 
+  function renderSimpleTextEditor(q: QuestionI) {
+    return (
+      <input
+        value={q.value}
+        onChange={(e) => {
+          onChange(q, e.target.value);
+        }}
+      ></input>
+    );
+  }
+
+  function renderSimpleDropdownEditor(q: QuestionI) {
+    return (
+      <select
+        value={q.value}
+        onChange={(e) => {
+          onChange(q, e.target.value);
+        }}
+      >
+        {q.dropdownCode?.map(({ value, content }) => (
+          <option key={value} value={value}>
+            {content}
+          </option>
+        ))}
+      </select>
+    );
+  }
+
+  function renderRichTextEditor(q: QuestionI) {
+    return (
+      <RichTextEditor
+        html={q.value}
+        onChange={(html) => {
+          onChange(q, html);
+        }}
+        onFocus={() => setCurrentVisibleRichTextEditorToolbar(q.id)}
+        onBlur={() => {}}
+        showToolbar={currentVisibleRichTextEditorToolbar === q.id}
+        toolbarContainer={() => toolbarWrapperDOM!}
+      ></RichTextEditor>
+    );
+  }
+
+  function renderUnknown(q: QuestionI) {
+    return <div key={q.id}>暂时不支持{q.editor}</div>;
+  }
+
   return (
     <div className="questioneditor">
       <div className="toolbar-wrapper" ref={setToolbarWrapperDOM}></div>
       <div className="content-wrapper">
         {toolbarWrapperDOM &&
           question.map((q) => {
-            if (q.editor === QuestionItemEditorType.SIMPLE_TEXT_EDITOR) {
-              return (
-                <div className="questionitem" key={q.id}>
-                  <div className="questionitem__label">{q.label}</div>
-                  <div className="questionitem__value">
-                    <input
-                      value={q.value}
-                      onChange={(e) => {
-                        onChange(q, e.target.value);
-                      }}
-                    ></input>
-                  </div>
+            return (
+              <div className="questionitem" key={q.id}>
+                <div className="questionitem__label">{q.label}</div>
+                <div className="questionitem__value">
+                  {q.editor === QuestionItemEditorType.SIMPLE_TEXT_EDITOR
+                    ? renderSimpleTextEditor(q)
+                    : q.editor === QuestionItemEditorType.SIMPLE_DROPDOWN_EDITOR
+                    ? renderSimpleDropdownEditor(q)
+                    : q.editor === QuestionItemEditorType.RICH_TEXT_EDITOR
+                    ? renderRichTextEditor(q)
+                    : renderUnknown(q)}
                 </div>
-              );
-            } else if (
-              q.editor === QuestionItemEditorType.SIMPLE_DROPDOWN_EDITOR
-            ) {
-              return (
-                <div className="questionitem" key={q.id}>
-                  <div className="questionitem__label">{q.label}</div>
-                  <div className="questionitem__value">
-                    <select
-                      value={q.value}
-                      onChange={(e) => {
-                        onChange(q, e.target.value);
-                      }}
-                    >
-                      {q.dropdownCode?.map(({ value, content }) => (
-                        <option key={value} value={value}>
-                          {content}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              );
-            } else if (q.editor === QuestionItemEditorType.RICH_TEXT_EDITOR) {
-              return (
-                <div className="questionitem" key={q.id}>
-                  <div className="questionitem__label">{q.label}</div>
-                  <div className="questionitem__value">
-                    <RichTextEditor
-                      html={q.value}
-                      onChange={(html) => {
-                        onChange(q, html);
-                      }}
-                      onFocus={() =>
-                        setCurrentVisibleRichTextEditorToolbar(q.id)
-                      }
-                      onBlur={() => {}}
-                      showToolbar={currentVisibleRichTextEditorToolbar === q.id}
-                      toolbarContainer={() => toolbarWrapperDOM!}
-                    ></RichTextEditor>
-                  </div>
-                </div>
-              );
-            } else {
-              return <div key={q.id}>还没处理好...{q.editor}</div>;
-            }
+              </div>
+            );
           })}
       </div>
     </div>
